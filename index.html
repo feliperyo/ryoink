@@ -23,23 +23,68 @@
             --text-gray: #999999;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: var(--black);
             color: var(--white);
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none;
         }
 
-        /* Header Minimalista */
+        /* CURSOR CUSTOMIZADO */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.15s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 51, 51, 0.1);
+            border-color: var(--orange);
+        }
+
+        /* HEADER */
         header {
             position: fixed;
             top: 0;
             width: 100%;
+            background: rgba(10, 10, 10, 0.0);
+            backdrop-filter: blur(0px);
+            padding: 2rem 5%;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        header.scrolled {
             background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
             padding: 1.5rem 5%;
-            z-index: 1000;
             border-bottom: 1px solid rgba(255, 51, 51, 0.1);
         }
 
@@ -56,10 +101,22 @@
             font-weight: 700;
             color: var(--white);
             letter-spacing: 2px;
+            position: relative;
         }
 
-        .logo span {
-            color: var(--red);
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: width 0.3s;
+        }
+
+        .logo:hover::after {
+            width: 100%;
         }
 
         .nav-links {
@@ -76,47 +133,109 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--red);
+            transition: width 0.3s;
         }
 
         .nav-links a:hover {
             color: var(--red);
         }
 
-        /* Hero Section */
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        /* HERO COM VÍDEO */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            padding-top: 80px;
-            background: linear-gradient(180deg, var(--black) 0%, var(--dark-gray) 100%);
+            overflow: hidden;
+        }
+
+        .hero-video-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .hero-video-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            background: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--text-gray);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.8), rgba(10, 10, 10, 0.6));
+            z-index: 1;
         }
 
         .hero-content {
             text-align: center;
-            z-index: 1;
+            z-index: 2;
             padding: 2rem;
+            position: relative;
         }
 
         .hero h1 {
-            font-size: 6rem;
+            font-size: 7rem;
             margin-bottom: 1rem;
             font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1;
+            letter-spacing: -3px;
+            line-height: 0.9;
+            background: linear-gradient(135deg, var(--white) 0%, var(--red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease-out;
         }
 
-        .hero h1 .highlight {
-            color: var(--red);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
+        .hero .subtitle {
+            font-size: 1.5rem;
             color: var(--text-gray);
             margin-bottom: 3rem;
             font-weight: 300;
-            letter-spacing: 1px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease-out 0.2s backwards;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.4s backwards;
         }
 
         .cta-button {
@@ -127,213 +246,315 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
-            border-radius: 0;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .cta-button:hover {
             background: var(--orange);
             transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(255, 51, 51, 0.3);
+            box-shadow: 0 15px 40px rgba(255, 51, 51, 0.4);
         }
 
-        /* Container */
-        .container {
+        .cta-secondary {
+            background: transparent;
+            border: 2px solid var(--red);
+        }
+
+        .cta-secondary:hover {
+            background: var(--red);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            display: block;
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, var(--red));
+            margin: 0 auto 10px;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* BENTO GRID */
+        .bento-section {
+            padding: 8rem 5%;
             max-width: 1600px;
             margin: 0 auto;
-            padding: 0 5%;
         }
 
-        /* Layout Fluido */
-        .content-flow {
-            padding: 4rem 5%;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Delivery Section - Layout Natural */
-        .delivery-block {
+        .bento-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6rem;
-            margin: 8rem 0;
-            align-items: center;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 250px;
+            gap: 2rem;
         }
 
-        .text-content h2 {
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            font-weight: 800;
-            line-height: 1.1;
+        .bento-item {
+            background: var(--dark-gray);
+            border: 1px solid rgba(255, 51, 51, 0.1);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .text-content h2 .accent {
+        .bento-item:hover {
+            border-color: var(--red);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.2);
+        }
+
+        .bento-item.large {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        .bento-item.tall {
+            grid-row: span 2;
+        }
+
+        .bento-item.wide {
+            grid-column: span 2;
+        }
+
+        .bento-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
             color: var(--red);
         }
 
-        .text-content p {
-            font-size: 1.1rem;
+        .bento-item p {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* DELIVERY SECTION */
+        .delivery-section {
+            padding: 10rem 5%;
+            position: relative;
+        }
+
+        .delivery-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .delivery-content h2 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--white), var(--red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .delivery-content p {
+            font-size: 1.15rem;
             line-height: 1.8;
             color: var(--text-gray);
             margin-bottom: 1.5rem;
         }
 
-        .image-box {
+        .delivery-image {
             position: relative;
-            width: 100%;
-            height: 500px;
+            height: 600px;
             background: var(--dark-gray);
             overflow: hidden;
-            transition: all 0.5s ease;
+            transition: all 0.5s;
+            border: 1px solid rgba(255, 51, 51, 0.1);
         }
 
-        .image-box:hover {
+        .delivery-image:hover {
+            border-color: var(--red);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        .delivery-image::before {
+            content: '📦 Sua maleta/equipamento aqui';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            text-align: center;
+        }
+
+        /* GALLERY */
+        .gallery-section {
+            padding: 8rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--white), var(--red), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 450px;
+            background: var(--dark-gray);
+            overflow: hidden;
+            border: 1px solid rgba(255, 51, 51, 0.1);
+            transition: all 0.4s;
+        }
+
+        .gallery-item:nth-child(3n) {
+            height: 550px;
+        }
+
+        .gallery-item:hover {
             transform: scale(1.02);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-color: var(--red);
+            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.3);
+            z-index: 10;
         }
 
-        .image-box::before {
+        .gallery-item::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255, 51, 51, 0.1), rgba(255, 107, 53, 0.1));
-            z-index: 1;
+            background: linear-gradient(0deg, rgba(10, 10, 10, 0.9) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
         }
 
-        .image-placeholder {
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-placeholder {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 1.2rem;
             color: var(--text-gray);
-            z-index: 2;
-            text-align: center;
         }
 
-        /* Grid de Imagens Fluido */
-        .work-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 6rem 0;
+        /* INSTAGRAM */
+        .instagram-section {
+            padding: 8rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
-        .work-item {
-            position: relative;
-            height: 450px;
-            background: var(--dark-gray);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s ease;
-        }
-
-        .work-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(255, 51, 51, 0.2);
-        }
-
-        .work-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(0deg, rgba(10, 10, 10, 0.8) 0%, transparent 50%);
-            opacity: 0;
-            transition: all 0.4s;
-        }
-
-        .work-item:hover::after {
-            opacity: 1;
-        }
-
-        /* Texto ao lado de conteúdo */
-        .side-text-block {
+        .instagram-wrapper {
             display: flex;
             gap: 4rem;
-            margin: 10rem 0;
             align-items: flex-start;
         }
 
-        .side-text-block.reverse {
-            flex-direction: row-reverse;
-        }
-
-        .side-text {
+        .instagram-text {
             flex: 1;
             position: sticky;
-            top: 120px;
+            top: 150px;
         }
 
-        .side-text h3 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-            color: var(--red);
+        .instagram-text h2 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--white), var(--red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .side-text p {
-            font-size: 1.1rem;
+        .instagram-text p {
+            font-size: 1.15rem;
             line-height: 1.8;
             color: var(--text-gray);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .side-content {
-            flex: 1.5;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .content-card {
-            height: 400px;
-            background: var(--dark-gray);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s;
-        }
-
-        .content-card:hover {
-            transform: scale(1.03);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Instagram Feed Minimalista */
-        .insta-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 6rem 0;
-        }
-
-        .insta-item {
-            position: relative;
-            aspect-ratio: 1;
-            background: var(--dark-gray);
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .insta-item:hover {
-            transform: scale(0.98);
-            opacity: 0.8;
-        }
-
-        .insta-link-box {
-            text-align: center;
-            padding: 3rem 0;
-        }
-
-        .insta-link-box a {
+        .instagram-link {
+            display: inline-block;
             color: var(--red);
             text-decoration: none;
             font-size: 1.3rem;
@@ -341,28 +562,116 @@
             transition: all 0.3s;
         }
 
-        .insta-link-box a:hover {
+        .instagram-link:hover {
             color: var(--orange);
+            transform: translateX(10px);
         }
 
-        /* Reviews Minimalistas */
-        .reviews-flow {
+        .instagram-feed {
+            flex: 1.5;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 6rem 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
         }
 
-        .review-box {
+        .insta-post {
+            aspect-ratio: 1;
+            background: var(--dark-gray);
+            overflow: hidden;
+            border: 1px solid rgba(255, 51, 51, 0.1);
+            transition: all 0.3s;
+        }
+
+        .insta-post:hover {
+            transform: scale(0.95);
+            border-color: var(--red);
+        }
+
+        /* VIDEOS */
+        .videos-section {
+            padding: 8rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            grid-template-rows: repeat(2, 350px);
+            gap: 2rem;
+        }
+
+        .video-item {
+            background: var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 51, 51, 0.1);
+            transition: all 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-item:first-child {
+            grid-row: span 2;
+        }
+
+        .video-item:hover {
+            border-color: var(--red);
+            transform: scale(1.02);
+            box-shadow: 0 20px 60px rgba(255, 51, 51, 0.3);
+        }
+
+        .video-item::before {
+            content: '▶';
+            font-size: 3rem;
+            color: var(--red);
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .video-item:hover::before {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* REVIEWS */
+        .reviews-section {
+            padding: 8rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .review-card {
             background: var(--dark-gray);
             padding: 2.5rem;
             border-left: 3px solid var(--red);
             transition: all 0.3s;
+            position: relative;
         }
 
-        .review-box:hover {
+        .review-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: var(--red);
+            opacity: 0.1;
+            font-family: Georgia, serif;
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             border-left-color: var(--orange);
-            transform: translateX(10px);
         }
 
         .stars {
@@ -374,8 +683,10 @@
         .review-text {
             font-style: italic;
             color: var(--text-gray);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             line-height: 1.7;
+            position: relative;
+            z-index: 1;
         }
 
         .review-author {
@@ -383,59 +694,70 @@
             font-weight: 600;
         }
 
-        /* About Section */
-        .about-flex {
+        /* ABOUT */
+        .about-section {
+            padding: 10rem 5%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .about-wrapper {
             display: flex;
             gap: 6rem;
-            margin: 10rem 0;
             align-items: center;
         }
 
         .about-image {
-            flex: 0 0 450px;
-            height: 600px;
+            flex: 0 0 500px;
+            height: 650px;
             background: var(--dark-gray);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 51, 51, 0.1);
+            transition: all 0.5s;
         }
 
-        .about-image::after {
-            content: '';
+        .about-image:hover {
+            border-color: var(--red);
+            transform: scale(1.02);
+            box-shadow: 0 25px 70px rgba(255, 51, 51, 0.3);
+        }
+
+        .about-image::before {
+            content: '📸 Sua foto aqui';
             position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--red), var(--orange));
-            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: var(--text-gray);
         }
 
-        .about-text {
+        .about-content {
             flex: 1;
         }
 
-        .about-text h3 {
-            font-size: 3rem;
+        .about-content h2 {
+            font-size: 3.5rem;
             margin-bottom: 2rem;
             font-weight: 800;
+            background: linear-gradient(135deg, var(--white), var(--red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .about-text h3 .highlight {
-            color: var(--red);
-        }
-
-        .about-text p {
-            font-size: 1.1rem;
+        .about-content p {
+            font-size: 1.15rem;
             line-height: 1.8;
             color: var(--text-gray);
             margin-bottom: 1.5rem;
         }
 
-        /* Footer */
+        /* FOOTER */
         footer {
             background: var(--dark-gray);
             padding: 4rem 5%;
-            border-top: 1px solid rgba(255, 51, 51, 0.1);
+            border-top: 1px solid rgba(255, 51, 51, 0.2);
             margin-top: 8rem;
         }
 
@@ -503,7 +825,7 @@
             font-size: 0.9rem;
         }
 
-        /* WhatsApp Float */
+        /* WHATSAPP */
         .whatsapp-btn {
             position: fixed;
             bottom: 30px;
@@ -516,87 +838,99 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4);
-            cursor: pointer;
-            z-index: 1000;
+            z-index: 999;
             transition: all 0.3s;
             font-size: 2rem;
         }
 
         .whatsapp-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
             box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
         }
 
-        /* Responsivo */
+        /* RESPONSIVO */
         @media (max-width: 1024px) {
 
-            .delivery-block,
-            .about-flex {
+            .delivery-wrapper,
+            .instagram-wrapper,
+            .about-wrapper {
                 grid-template-columns: 1fr;
-            }
-
-            .side-text-block {
                 flex-direction: column;
             }
 
-            .side-text {
+            .instagram-text {
                 position: relative;
                 top: 0;
             }
 
-            .hero h1 {
-                font-size: 4rem;
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-item:first-child {
+                grid-row: span 1;
             }
         }
 
         @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+
             .nav-links {
                 gap: 1rem;
                 flex-wrap: wrap;
-                justify-content: center;
             }
 
-            .hero h1 {
-                font-size: 3rem;
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
             }
 
-            .text-content h2 {
-                font-size: 2.5rem;
-            }
-
-            .insta-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .work-grid {
+            .bento-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* Animações */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+            .bento-item.large,
+            .bento-item.tall,
+            .bento-item.wide {
+                grid-column: span 1;
+                grid-row: span 1;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .gallery-grid {
+                grid-template-columns: 1fr;
             }
-        }
 
-        .fade-in {
-            animation: fadeInUp 0.8s ease-out;
+            .instagram-feed {
+                grid-template-columns: 1fr;
+            }
+
+            body {
+                cursor: default;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
     <!-- Header -->
     <header>
         <nav>
-            <div class="logo">RYO<span>_</span>INK</div>
+            <div class="logo">RYO_INK</div>
             <ul class="nav-links">
                 <li><a href="#home">Início</a></li>
                 <li><a href="#delivery">Delivery</a></li>
@@ -609,155 +943,174 @@
 
     <!-- Hero -->
     <section class="hero" id="home">
+        <div class="hero-video-container">
+            <div class="hero-video-bg">🎥 Vídeo de fundo aqui</div>
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-content">
-            <h1>RYO <span class="highlight">INK</span></h1>
-            <p>TATUAGEM DELIVERY · SUZANO E REGIÃO</p>
-            <a href="https://wa.me/5511972821988" class="cta-button" target="_blank">Agendar Agora</a>
+            <h1>RYO INK</h1>
+            <p class="subtitle">Tatuagem Delivery · Suzano e Região</p>
+            <div class="cta-group">
+                <a href="https://wa.me/5511972821988" class="cta-button" target="_blank">Agendar Agora</a>
+                <a href="#trabalhos" class="cta-button cta-secondary">Ver Trabalhos</a>
+            </div>
+        </div>
+        <div class="scroll-indicator"><span></span></div>
+    </section>
+
+    <!-- Bento Grid -->
+    <section class="bento-section">
+        <div class="bento-grid">
+            <div class="bento-item large">
+                <h3>Tattoo Delivery</h3>
+                <p>Equipamento profissional completo na sua casa. Conforto, segurança e qualidade onde você estiver.</p>
+            </div>
+            <div class="bento-item">
+                <h3>104+</h3>
+                <p>Trabalhos realizados</p>
+            </div>
+            <div class="bento-item">
+                <h3>441+</h3>
+                <p>Clientes satisfeitos</p>
+            </div>
+            <div class="bento-item tall">
+                <h3>Qualidade</h3>
+                <p>Material esterilizado, tintas premium e técnicas modernas.</p>
+            </div>
+            <div class="bento-item wide">
+                <h3>Suzano & Região</h3>
+                <p>Atendimento personalizado onde você preferir</p>
+            </div>
         </div>
     </section>
 
-    <!-- Content Flow -->
-    <div class="content-flow">
-
-        <!-- Delivery -->
-        <div class="delivery-block" id="delivery">
-            <div class="text-content">
-                <h2>Tattoo <span class="accent">Delivery</span></h2>
-                <p>Levo minha arte até você. Equipamento profissional completo, material esterilizado e toda segurança
-                    que você merece.</p>
-                <p>Minha maleta contém máquinas de última geração, tintas premium e material descartável. Transformo
-                    qualquer lugar em um estúdio profissional.</p>
-                <p>Atendimento personalizado em Suzano e região. Flexibilidade de horários e total conforto para você.
-                </p>
+    <!-- Delivery -->
+    <section class="delivery-section" id="delivery">
+        <div class="delivery-wrapper">
+            <div class="delivery-content">
+                <h2>Tattoo Delivery</h2>
+                <p>Levo minha arte até você com equipamento profissional completo e portátil. Cada sessão é única, no
+                    conforto do seu espaço.</p>
+                <p>Minha maleta contém máquinas de última geração, tintas de alta qualidade e todo material esterilizado
+                    necessário para garantir sua segurança.</p>
+                <p>Flexibilidade total de horários em Suzano e região. Transformo qualquer ambiente em um estúdio
+                    profissional.</p>
             </div>
-            <div class="image-box">
-                <div class="image-placeholder">Foto do equipamento / maleta</div>
+            <div class="delivery-image"></div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery-section" id="trabalhos">
+        <div class="section-header">
+            <h2>Portfólio</h2>
+            <p>Cada traço conta uma história</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 1</div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 2</div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 3</div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 4</div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 5</div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-placeholder">Trabalho 6</div>
             </div>
         </div>
+    </section>
 
-        <!-- Grid de Trabalhos -->
-        <div class="work-grid" id="trabalhos">
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 1</div>
+    <!-- Instagram -->
+    <section class="instagram-section">
+        <div class="instagram-wrapper">
+            <div class="instagram-text">
+                <h2>No Instagram</h2>
+                <p>Acompanhe os trabalhos mais recentes, bastidores e o dia a dia do processo criativo.</p>
+                <p>Cada post é uma nova história, uma nova arte sendo criada.</p>
+                <a href="https://instagram.com/ryo.ink_" class="instagram-link" target="_blank">@ryo.ink_ →</a>
             </div>
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 2</div>
-            </div>
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 3</div>
-            </div>
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 4</div>
-            </div>
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 5</div>
-            </div>
-            <div class="work-item">
-                <div class="image-placeholder">Trabalho 6</div>
+            <div class="instagram-feed">
+                <div class="insta-post"></div>
+                <div class="insta-post"></div>
+                <div class="insta-post"></div>
+                <div class="insta-post"></div>
+                <div class="insta-post"></div>
+                <div class="insta-post"></div>
             </div>
         </div>
+    </section>
 
-        <!-- Instagram com texto ao lado -->
-        <div class="side-text-block">
-            <div class="side-text">
-                <h3>Acompanhe no Instagram</h3>
-                <p>Veja os trabalhos mais recentes, bastidores e novidades direto do meu feed.</p>
-                <p>Cada tatuagem é única e conta uma história diferente.</p>
-            </div>
-            <div class="side-content">
-                <div class="insta-grid">
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                    <div class="insta-item">
-                        <div class="image-placeholder">IG</div>
-                    </div>
-                </div>
-                <div class="insta-link-box">
-                    <a href="https://instagram.com/ryo.ink_" target="_blank">@ryo.ink_ →</a>
-                </div>
-            </div>
+    <!-- Videos -->
+    <section class="videos-section">
+        <div class="section-header">
+            <h2>Processo</h2>
+            <p>Do esboço à finalização</p>
         </div>
-
-        <!-- Vídeos com texto ao lado -->
-        <div class="side-text-block reverse">
-            <div class="side-text">
-                <h3>Processo e Bastidores</h3>
-                <p>Veja como cada arte ganha vida. Do esboço à finalização, cada detalhe importa.</p>
-                <p>Técnica, precisão e criatividade em cada traço.</p>
-            </div>
-            <div class="side-content">
-                <div class="content-card">
-                    <div class="image-placeholder">Vídeo 1</div>
-                </div>
-                <div class="content-card">
-                    <div class="image-placeholder">Vídeo 2</div>
-                </div>
-                <div class="content-card">
-                    <div class="image-placeholder">Vídeo 3</div>
-                </div>
-            </div>
+        <div class="videos-grid">
+            <div class="video-item"></div>
+            <div class="video-item"></div>
+            <div class="video-item"></div>
         </div>
+    </section>
 
-        <!-- Reviews -->
-        <div class="reviews-flow">
-            <div class="review-box">
+    <!-- Reviews -->
+    <section class="reviews-section">
+        <div class="section-header">
+            <h2>O que dizem</h2>
+            <p>Feedback de quem já viveu a experiência</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card">
                 <div class="stars">★★★★★</div>
-                <p class="review-text">"Profissional incrível! A tatuagem ficou perfeita e o atendimento foi impecável.
-                    Super recomendo o trabalho da Ryo Ink!"</p>
+                <p class="review-text">Profissional incrível! A tatuagem ficou perfeita e o atendimento foi impecável.
+                    Super recomendo o trabalho da Ryo Ink!</p>
                 <p class="review-author">Maria Silva</p>
             </div>
-            <div class="review-box">
+            <div class="review-card">
                 <div class="stars">★★★★★</div>
-                <p class="review-text">"Melhor experiência com tatuagem que já tive. O delivery é uma ideia genial e a
-                    qualidade do trabalho é excepcional!"</p>
+                <p class="review-text">Melhor experiência com tatuagem que já tive. O delivery é uma ideia genial e a
+                    qualidade do trabalho é excepcional!</p>
                 <p class="review-author">João Santos</p>
             </div>
-            <div class="review-box">
+            <div class="review-card">
                 <div class="stars">★★★★★</div>
-                <p class="review-text">"Arte de verdade! Cuidadoso, atencioso e super talentoso. Minha tattoo ficou
-                    exatamente como eu imaginei."</p>
+                <p class="review-text">Arte de verdade! Cuidadoso, atencioso e super talentoso. Minha tattoo ficou
+                    exatamente como eu imaginei.</p>
                 <p class="review-author">Ana Costa</p>
             </div>
-            <div class="review-box">
+            <div class="review-card">
                 <div class="stars">★★★★★</div>
-                <p class="review-text">"Impressionante a dedicação e profissionalismo. O trabalho é impecável e o
-                    serviço de delivery trouxe muita comodidade!"</p>
+                <p class="review-text">Impressionante a dedicação e profissionalismo. O trabalho é impecável e o serviço
+                    de delivery trouxe muita comodidade!</p>
                 <p class="review-author">Pedro Oliveira</p>
             </div>
         </div>
+    </section>
 
-        <!-- Sobre -->
-        <div class="about-flex" id="sobre">
-            <div class="about-image">
-                <div class="image-placeholder">Sua foto</div>
-            </div>
-            <div class="about-text">
-                <h3>Ryo<br><span class="highlight">Artista Tatuador</span></h3>
-                <p>Apaixonado por arte desde sempre, transformo pele em tela há anos. Minha missão é criar tatuagens
-                    únicas que contam histórias e expressam a essência de cada cliente.</p>
-                <p>Especializado em diversos estilos, desde o minimalista ao realismo, trabalho com técnicas modernas e
-                    equipamentos de última geração.</p>
-                <p>Com o conceito de Tattoo Delivery, levo profissionalismo e arte até você em Suzano e região,
-                    oferecendo conforto sem abrir mão da qualidade.</p>
-                <p>Cada tatuagem é uma obra única, feita com dedicação e paixão. Vamos criar sua próxima arte juntos?
-                </p>
+    <!-- About -->
+    <section class="about-section" id="sobre">
+        <div class="about-wrapper">
+            <div class="about-image"></div>
+            <div class="about-content">
+                <h2>Ryo<br>Artista Tatuador</h2>
+                <p>Apaixonado por arte desde sempre, transformo pele em tela há anos. Cada tatuagem é uma história única
+                    que merece ser contada com técnica e sensibilidade.</p>
+                <p>Especializado em diversos estilos, trabalho com equipamentos de última geração e técnicas modernas
+                    para garantir o melhor resultado.</p>
+                <p>O conceito de Tattoo Delivery nasceu da vontade de democratizar o acesso à arte de qualidade, levando
+                    profissionalismo até você.</p>
+                <p>Vamos criar sua próxima arte juntos?</p>
             </div>
         </div>
-
-    </div>
+    </section>
 
     <!-- Footer -->
     <footer id="contato">
@@ -801,31 +1154,70 @@
         target="_blank">💬</a>
 
     <script>
-        // Scroll suave
+        // CURSOR CUSTOMIZADO
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            cursorDot.style.left = mouseX + 'px';
+            cursorDot.style.top = mouseY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover no cursor
+        const hoverElements = document.querySelectorAll('a, button, .gallery-item, .insta-post, .video-item, .review-card, .bento-item');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // HEADER SCROLL
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // SMOOTH SCROLL
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
 
-        // Header transparência
+        // PARALLAX
         window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(10, 10, 10, 0.98)';
-            } else {
-                header.style.background = 'rgba(10, 10, 10, 0.95)';
-            }
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.delivery-image, .about-image');
+
+            parallaxElements.forEach(el => {
+                const speed = 0.5;
+                el.style.transform = `translateY(${scrolled * speed * 0.1}px)`;
+            });
         });
 
-        // Animação de entrada
+        // INTERSECTION OBSERVER
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -100px 0px'
@@ -840,11 +1232,32 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.delivery-block, .work-grid, .side-text-block, .reviews-flow, .about-flex').forEach(el => {
+        document.querySelectorAll('.bento-section, .delivery-section, .gallery-section, .instagram-section, .videos-section, .reviews-section, .about-section').forEach(el => {
             el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'all 0.8s ease-out';
+            el.style.transform = 'translateY(50px)';
+            el.style.transition = 'all 1s ease-out';
             observer.observe(el);
+        });
+
+        // EFEITO 3D NOS CARDS
+        document.querySelectorAll('.gallery-item, .review-card, .bento-item').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `perspective(1000px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
         });
     </script>
 </body>
