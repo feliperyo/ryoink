@@ -45,7 +45,7 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: all 0.15s ease;
+            transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
             transform: translate(-50%, -50%);
             mix-blend-mode: difference;
         }
@@ -58,7 +58,6 @@
             position: fixed;
             pointer-events: none;
             z-index: 9998;
-            transition: all 0.1s ease;
             transform: translate(-50%, -50%);
         }
 
@@ -1154,29 +1153,16 @@
         target="_blank">💬</a>
 
     <script>
-        // CURSOR CUSTOMIZADO
+        // CURSOR CUSTOMIZADO - RÁPIDO E RESPONSIVO
         const cursor = document.querySelector('.cursor');
         const cursorDot = document.querySelector('.cursor-dot');
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
 
         document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
         });
-
-        function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-
-            cursor.style.left = cursorX + 'px';
-            cursor.style.top = cursorY + 'px';
-            cursorDot.style.left = mouseX + 'px';
-            cursorDot.style.top = mouseY + 'px';
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
 
         // Hover no cursor
         const hoverElements = document.querySelectorAll('a, button, .gallery-item, .insta-post, .video-item, .review-card, .bento-item');
